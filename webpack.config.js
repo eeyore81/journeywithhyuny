@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+import { DefinePlugin } from 'webpack'
+
 module.exports = {
   entry: ['./src/index.js'],
   output: {
@@ -26,5 +29,10 @@ module.exports = {
       aggregateTimeout: 300,
       poll: 1000
     }
-  }
+  },
+  plugins: [
+    new DefinePlugin({
+      'process.env': JSON.stringify(dotenv.config().parsed)
+    })
+  ]
 };

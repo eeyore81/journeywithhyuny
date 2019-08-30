@@ -7,6 +7,7 @@ const _ = require('lodash');
 const DiaryItemBase= (props) => {
    const [article, setArticle] = useState([]);
    const [category, setCategory] = useState([]);
+   const [categorySelected, setCategorySelected] = useState([]);
    const articles=[];
    // Similar to componentDidMount and componentDidUpdate:
    useEffect(() => {
@@ -24,20 +25,24 @@ const DiaryItemBase= (props) => {
      props.firebase.category().once('value').then(snapshot=>{
        console.log(snapshot.val());
         const categoryOptions = _.map(snapshot.val(), (category,index) => ({
-        key: snapshot.val()[index],
+        key: index,
         text: category,
-        value: snapshot.val()[index]
+        value: category
       }))
       setCategory(categoryOptions);
      })
    },[]);
 
+   
+  const handleChange = (e, { value }) => setCategorySelected({ value })
 
   return (
     <div>
-      <Dropdown placeholder='State' search selection options={category}/>
+      <Dropdown placeholder='Select categories' selection options={category} value={categorySelected.value} onChange={handleChange} />
       <Item.Group>
       {article.slice(0).reverse().map((value)=>{
+        console.log("hi" + categorySelected.text);
+        if(categorySelected.value==undefined || value.category == categorySelected.value) {
           return <Item>
             <Item.Image size='tiny' src='https://react.semantic-ui.com/images/wireframe/image.png' />
             <Item.Content>
@@ -48,6 +53,7 @@ const DiaryItemBase= (props) => {
               <iframe src={value.mediaLink}  allowFullScreen="allowFullScreen" frameBorder="0"  height="400" width="600"></iframe>:""}</Item.Extra>
             </Item.Content>
           </Item>
+        }
       })}
       </Item.Group>
       </div>
