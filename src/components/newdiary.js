@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form'
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Checkbox, Form, Dropdown } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom';
-
 
 const renderTextArea = ({input, meta: { touched, error, warning }}) => (
     <div>
@@ -16,9 +15,15 @@ const renderTextArea = ({input, meta: { touched, error, warning }}) => (
 
 let NewDiary = props => {
     const { handleSubmit, content } = props
-    
+    const [categorySelected, setCategorySelected] = useState([]);
+    const handleChange = (e, { value }) => setCategorySelected({ value })
+
     return (
-        <Form onSubmit={handleSubmit}>      
+        <Form onSubmit={handleSubmit}>
+        <div>
+          <Field component={DropdownFormField} name="category" placeholder='Select categories' selection options={props.categoryOptions}>
+          </Field>
+        </div>        
         <div>
         <label htmlFor="title">Title</label>
         <Field name="title" component="input" type="text" />
@@ -41,3 +46,14 @@ NewDiary = reduxForm({
 
   })(NewDiary);
 export default NewDiary;
+
+const DropdownFormField = props => (
+  <Form.Field>
+    <Dropdown selection {...props.input}
+              options={props.options}
+              value={props.input.value}
+              onChange={(param,data) => props.input.onChange(data.value)}
+              placeholder={props.label} 
+     />
+   </Form.Field>
+ )

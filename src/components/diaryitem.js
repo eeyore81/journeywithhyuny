@@ -30,7 +30,7 @@ const DiaryItemBase= (props) => {
         value: category
       }))
       setCategory(categoryOptions);
-     })
+     });
    },[]);
 
    
