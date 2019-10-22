@@ -1,0 +1,19 @@
+/* .container .header {
+} */
+
+.container .header .image {
+    background: url("/images/header-bg1.png") no-repeat left center;
+    background-size: 75vw;
+    height : 50vh;
+    width: 75vw;
+    margin-bottom : -80px;
+    margin-left : -30px;
+}
+
+.container .header .text {
+    text-align: center;
+    font-family: serif;
+    font-size: xx-large;
+    color : wheat;
+    margin-bottom : 100px;
+}

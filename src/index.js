@@ -7,7 +7,6 @@ import App from './components/app';
 import reducers from './reducers';
 import store from './store'
 import Firebase, { FirebaseContext } from './components/firebase';
-const createStoreWithMiddleware = applyMiddleware()(createStore);
 
 ReactDOM.render(
   <Provider store={store}>

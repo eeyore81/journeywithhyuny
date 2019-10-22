@@ -19,13 +19,19 @@ const NewDiaryContainer = (props) => {
       });
     },[]);
     const onSubmitHandler = (values) => {
+        if(props.location.update != undefined) {
+          let ref = props.firebase.blogs().child(props.location.update.key);
+          ref.set(values);
+        } else {
         props.firebase.blogs().push({title: values.title, category: values.category, comment: values.comment, mediaLink: values.mediaLink})
+        }
         console.log(values);
         setRedirect(1);
     }
     if(redirect ==1)
         return (<Redirect to='/diary'/>);
-    return <NewDairy onSubmit={onSubmitHandler} categoryOptions = {category} />;
+    console.log(props.location.update);
+    return <NewDairy onSubmit={onSubmitHandler} categoryOptions = {category} update= {props.location.update}/>;
 };
 
 export default withFirebase(NewDiaryContainer);

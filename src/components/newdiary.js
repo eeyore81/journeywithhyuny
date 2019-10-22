@@ -15,27 +15,36 @@ const renderTextArea = ({input, meta: { touched, error, warning }}) => (
 
 let NewDiary = props => {
     const { handleSubmit, content } = props
-    const [categorySelected, setCategorySelected] = useState([]);
-    const handleChange = (e, { value }) => setCategorySelected({ value })
-
+    console.log(props.update);
+    useEffect(()=>{
+    if(props.update != undefined){
+      props.initialize({ title: props.update.title,category:props.update.category,comment:props.update.comment,mediaLink:props.update.mediaLink });
+    }
+  },[]);
+    // need to make container to add handler and receive values from redux-form
     return (
         <Form onSubmit={handleSubmit}>
-        <div>
-          <Field component={DropdownFormField} name="category" placeholder='Select categories' selection options={props.categoryOptions}>
+        <div class="field">
+          <label htmlFor="Category">Title</label>
+          <Field component={DropdownFormField} name="category" label='Select categories' selection options={props.categoryOptions}>
           </Field>
         </div>        
-        <div>
+        <div class="field">
         <label htmlFor="title">Title</label>
         <Field name="title" component="input" type="text" />
       </div>
-      <div>
+      <div class="field">
         <Field name="comment" component={renderTextArea} {...content}/>
       </div>
-      <div>
+      <div class="field">
         <label htmlFor="mediaLink">Media Link</label>
         <Field name="mediaLink" component="input" type="text" />
       </div>
-      <button type="submit">Submit</button>
+      <div className="ui right aligned container">
+        <div>
+          <button className="ui right button" type="submit">Submit</button>
+        </div>
+      </div>
     </Form>
     );
 };

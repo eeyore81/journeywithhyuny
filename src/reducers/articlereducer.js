@@ -10,13 +10,23 @@ const applySetArticle = (state, action) => ({
     },
 });
 
+
+const applySetArticles = (state, action) => ({
+    //  ...state,
+     articles : action.articles,}
+);
+
 function articleReducer(state = INITIAL_STATE, action) {
+  console.log("reducer");
     switch (action.type) {
     //   case 'USERS_SET': {
     //     return applySetUsers(state, action);
     //   }
       case 'ARTICLE_SET': {
         return applySetArticle(state, action);
+      }
+      case 'ARTICLES_SET': {
+        return applySetArticles(state, action);
       }
       default:
         return state;
