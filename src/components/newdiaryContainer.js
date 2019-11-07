@@ -19,11 +19,12 @@ const NewDiaryContainer = (props) => {
       });
     },[]);
     const onSubmitHandler = (values) => {
+        console.log(values);
         if(props.location.update != undefined) {
           let ref = props.firebase.blogs().child(props.location.update.key);
           ref.set(values);
         } else {
-        props.firebase.blogs().push({title: values.title, category: values.category, comment: values.comment, mediaLink: values.mediaLink})
+        props.firebase.blogs().push({title: values.title, category: values.category, comment: values.comment || "", mediaLink: values.mediaLink || ""})
         }
         console.log(values);
         setRedirect(1);

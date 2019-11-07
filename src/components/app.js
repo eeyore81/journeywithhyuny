@@ -16,7 +16,8 @@ export default class App extends Component {
       <BrowserRouter>
         <Header/>
         <div>
-        <Route path="/" component={MainPage}/>
+        <Redirect to="/main"/>
+        <Route path="/main" component={MainPage}/>
         <Route name="diary" path="/diary" component={DiaryItem}/>
         <Route path="/new" component={NewDiaryContainer}/>
         <Route path="/about" component={AboutUs}/>

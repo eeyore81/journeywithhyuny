@@ -17,3 +17,32 @@
     color : wheat;
     margin-bottom : 100px;
 }
+
+p.oblique {
+    font-size: large;
+    font-family: "Times New Roman", Times, sans-serif;
+    font-size:22px;
+    font-style: oblique;
+}
+
+h1 {
+    font-family:medium-content-serif-font, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+p.poem {
+    box-sizing:border-box;
+    color:rgba(0, 0, 0, 0.84);
+    cursor:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAGOklEQ…cn5AGPx/Nkc3NzzW0F+MIiIyPVAwYMKAPwHaX0zRsB/AUzhoA/iawOCAAAAABJRU5ErkJggg==) 0 0, auto;
+    display:block;
+    font-family:medium-content-serif-font, Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size:18px;
+    font-style:italic;
+    font-weight:400;
+    letter-spacing:2px;
+    line-height:33.44px;
+    margin-top:28.08px;
+    overflow-wrap:break-word;
+    text-rendering:optimizelegibility;
+    word-break:break-word;
+    -webkit-font-smoothing:antialiased;
+}

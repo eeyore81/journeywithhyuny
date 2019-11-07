@@ -27,6 +27,7 @@ const Header = () => {
 
     return (
         <div className="ui medium menu">
+        <Link className="item" to="/main">Home</Link>
         <Link className="item" to="/diary">Articles</Link>
         <Link className="item" to="/new"> Write an Article</Link>
         <Link className="item" to="/about">About Us</Link>
