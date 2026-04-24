@@ -1,6 +1,7 @@
 #!/bin/bash
 npm run build
 rm -rf ../eeyore81.github.io/*
+cp -rf public/* build/
 cp -rf build/* ../eeyore81.github.io
 cd ../eeyore81.github.io
 git add *
