@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Icon, Grid} from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
 import './header-img.css';
 
@@ -44,11 +44,11 @@ let MainPage = (props) => {
     And whether or not it is clear to you, no doubt the universe is unfolding as it should. Therefore be at peace with God, whatever you conceive Him to be. And whatever your labors and aspirations, in the noisy confusion of life, keep peace in your soul. With all its sham, drudgery and broken dreams, it is still a beautiful world. Be cheerful. Strive to be happy.
 </p>
 <p className="poem"> - Max Ehrmann</p>
-<iframe width="887" height="666" src="https://www.youtube.com/embed/K6G7t1t55iI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="887" height="666" src="https://www.youtube.com/embed/K6G7t1t55iI" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
 </Grid.Column>
 </Grid>
-<br></br><br></br><br></br>
-<br></br><br></br><br></br>
+<br /><br /><br />
+<br /><br /><br />
     </div>
     );
 

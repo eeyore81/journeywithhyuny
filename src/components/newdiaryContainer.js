@@ -7,10 +7,11 @@ const _ = require('lodash');
 const NewDiaryContainer = (props) => {
     const [redirect, setRedirect] = useState(0);
     const [category, setCategory] = useState([]);
+    const updateData = props.location && props.location.update;
+
     useEffect(()=>{
       props.firebase.category().once('value').then(snapshot=>{
-        console.log(snapshot.val());
-         const categoryOptions = _.map(snapshot.val(), (category,index) => ({
+         const categoryOptions = _.map(snapshot.val() || [], (category,index) => ({
          key: index,
          text: category,
          value: category
@@ -19,20 +20,17 @@ const NewDiaryContainer = (props) => {
       });
     },[]);
     const onSubmitHandler = (values) => {
-        console.log(values);
-        if(props.location.update != undefined) {
-          let ref = props.firebase.blogs().child(props.location.update.key);
+        if(updateData != undefined) {
+          let ref = props.firebase.blogs().child(updateData.key);
           ref.set(values);
         } else {
         props.firebase.blogs().push({title: values.title, category: values.category, comment: values.comment || "", mediaLink: values.mediaLink || ""})
         }
-        console.log(values);
         setRedirect(1);
     }
-    if(redirect ==1)
+    if(redirect === 1)
         return (<Redirect to='/diary'/>);
-    console.log(props.location.update);
-    return <NewDairy onSubmit={onSubmitHandler} categoryOptions = {category} update= {props.location.update}/>;
+    return <NewDairy onSubmit={onSubmitHandler} categoryOptions = {category} update= {updateData}/>;
 };
 
 export default withFirebase(NewDiaryContainer);

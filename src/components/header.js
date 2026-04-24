@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { BrowserRouter, Match,Route, Miss, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Search } from "semantic-ui-react";
-import { Menu } from 'semantic-ui-react'
-const _ = require('lodash');
 
 const Header = () => {
     const [result, setResult] = useState([]);
-    const [value, setValue] = useState();
-    const articles = useSelector(state => 
-        state.articleState.articles);
+    const [value, setValue] = useState('');
+    const articles = useSelector(state => state.articleState.articles || []);
     const isLoggedIn = useSelector(state =>
         state.authState.isLoggedIn);
     const dispatch = useDispatch();
@@ -18,11 +15,15 @@ const Header = () => {
         dispatch({type :'SEARCH_RESULT_SET', searchResult : result.title})
     }
     const handleSearchChange = (e, { value }) => {
-        setValue(null);
-        dispatch({type :'SEARCH_RESULT_SET', searchResult : result.title})
-        setResult(articles.filter((item)=>{
-        return item.value.title.toString().includes(value)}
-        ));
+        const nextValue = value || '';
+        setValue(nextValue);
+        dispatch({type :'SEARCH_RESULT_SET', searchResult : nextValue || null});
+
+        const filtered = articles.filter((item) => {
+            const title = (item && item.title) ? String(item.title) : '';
+            return title.toLowerCase().includes(nextValue.toLowerCase());
+        });
+        setResult(filtered);
     };
 
     return (
@@ -34,8 +35,16 @@ const Header = () => {
         <div className="right menu">
             <div className="item">
             <div className="ui icon input">
-                {result.map((item)=>(console.log(item.value.title,item.value.comment)))}
-                <Search onResultSelect={handleResultSelect} onSearchChange={handleSearchChange} results={result.map((item,index)=>({key:index,title:item.value.title,description:item.value.comment}))} />
+                                <Search
+                                    value={value}
+                                    onResultSelect={handleResultSelect}
+                                    onSearchChange={handleSearchChange}
+                                    results={result.map((item,index)=>({
+                                        key:index,
+                                        title:item.title,
+                                        description:item.comment
+                                    }))}
+                                />
             </div>
             </div>
             {isLoggedIn?<Link className="ui item" to="/logout">Logout</Link>:<Link className="ui item" to="/login">Login</Link>}

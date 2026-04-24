@@ -3,7 +3,7 @@ const INITIAL_STATE = {
 }
 
 const authreducer = (state = INITIAL_STATE, action) => {
-    switch(action.state) {
+    switch(action.type) {
         case 'LOG_IN' :
             return {...state, isLoggedIn : true};
         case 'LOG_OUT' :

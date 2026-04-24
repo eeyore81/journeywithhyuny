@@ -13,9 +13,8 @@ const firebaseConfig = {
 
 class Firebase {
   constructor() {
-    console.log(firebaseConfig);
-    app.initializeApp(firebaseConfig);
-    this.db = app.database();
+    const appInstance = app.apps.length ? app.app() : app.initializeApp(firebaseConfig);
+    this.db = appInstance.database();
   }
   blogs = () => this.db.ref('blog');
   category = () => this.db.ref('category');

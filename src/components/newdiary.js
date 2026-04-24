@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Field, FieldArray, reduxForm } from 'redux-form'
-import { Button, Checkbox, Form, Dropdown } from 'semantic-ui-react'
-import { Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Field, reduxForm } from 'redux-form'
+import { Form, Dropdown } from 'semantic-ui-react'
 
 const renderTextArea = ({input, meta: { touched, error, warning }}) => (
     <div>
@@ -15,28 +14,27 @@ const renderTextArea = ({input, meta: { touched, error, warning }}) => (
 
 let NewDiary = props => {
     const { handleSubmit, content } = props
-    console.log(props.update);
     useEffect(()=>{
     if(props.update != undefined){
       props.initialize({ title: props.update.title,category:props.update.category,comment:props.update.comment,mediaLink:props.update.mediaLink });
     }
-  },[]);
+  },[props.update, props.initialize]);
     // need to make container to add handler and receive values from redux-form
     return (
         <Form onSubmit={handleSubmit}>
-        <div class="field">
+        <div className="field">
           <label htmlFor="Category">Title</label>
           <Field component={DropdownFormField} name="category" label='Select categories' selection options={props.categoryOptions}>
           </Field>
         </div>        
-        <div class="field">
+        <div className="field">
         <label htmlFor="title">Title</label>
         <Field name="title" component="input" type="text" />
       </div>
-      <div class="field">
+      <div className="field">
         <Field name="comment" component={renderTextArea} {...content}/>
       </div>
-      <div class="field">
+      <div className="field">
         <label htmlFor="mediaLink">Media Link</label>
         <Field name="mediaLink" component="input" type="text" />
       </div>
