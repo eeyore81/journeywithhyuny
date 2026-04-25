@@ -1,66 +1,87 @@
-import React, { useEffect } from 'react';
-import { Field, reduxForm } from 'redux-form'
-import { Form, Dropdown } from 'semantic-ui-react'
+import React, { useEffect, useState } from 'react';
+import { Form, Dropdown, TextArea, Button } from 'semantic-ui-react';
 
-const renderTextArea = ({input, meta: { touched, error, warning }}) => (
-    <div>
-        <label>Content</label>
-        <div>
-            <textarea {...input} placeholder="Content" rows="10" cols="40"/>
-            {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-);
+const NewDiary = ({ onSubmit, categoryOptions, update = {} }) => {
+  const [formValues, setFormValues] = useState({
+    title: '',
+    category: '',
+    comment: '',
+    mediaLink: '',
+  });
 
-let NewDiary = props => {
-    const { handleSubmit, content } = props
-    useEffect(()=>{
-    if(props.update != undefined){
-      props.initialize({ title: props.update.title,category:props.update.category,comment:props.update.comment,mediaLink:props.update.mediaLink });
+  useEffect(() => {
+    if (update) {
+      setFormValues({
+        title: update.title || '',
+        category: update.category || '',
+        comment: update.comment || '',
+        mediaLink: update.mediaLink || '',
+      });
     }
-  },[props.update, props.initialize]);
-    // need to make container to add handler and receive values from redux-form
-    return (
-        <Form onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="Category">Title</label>
-          <Field component={DropdownFormField} name="category" label='Select categories' selection options={props.categoryOptions}>
-          </Field>
-        </div>        
-        <div className="field">
+  }, [update]);
+
+  const handleChange = (e, { name, value }) => {
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formValues);
+  };
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Field>
+        <label htmlFor="category">Category</label>
+        <Dropdown
+          selection
+          name="category"
+          placeholder="Select categories"
+          options={categoryOptions}
+          value={formValues.category}
+          onChange={handleChange}
+        />
+      </Form.Field>
+
+      <Form.Field>
         <label htmlFor="title">Title</label>
-        <Field name="title" component="input" type="text" />
-      </div>
-      <div className="field">
-        <Field name="comment" component={renderTextArea} {...content}/>
-      </div>
-      <div className="field">
+        <Form.Input
+          name="title"
+          value={formValues.title}
+          onChange={handleChange}
+          placeholder="Title"
+        />
+      </Form.Field>
+
+      <Form.Field>
+        <label htmlFor="comment">Content</label>
+        <TextArea
+          name="comment"
+          value={formValues.comment}
+          onChange={handleChange}
+          placeholder="Content"
+          rows={10}
+        />
+      </Form.Field>
+
+      <Form.Field>
         <label htmlFor="mediaLink">Media Link</label>
-        <Field name="mediaLink" component="input" type="text" />
-      </div>
-      <div className="ui right aligned container">
-        <div>
-          <button className="ui right button" type="submit">Submit</button>
-        </div>
-      </div>
+        <Form.Input
+          name="mediaLink"
+          value={formValues.mediaLink}
+          onChange={handleChange}
+          placeholder="Media Link"
+        />
+      </Form.Field>
+
+      <Button primary type="submit">
+        Submit
+      </Button>
     </Form>
-    );
+  );
 };
 
-NewDiary = reduxForm({
-    // a unique name for the form
-    form: 'newDiary',
-
-  })(NewDiary);
 export default NewDiary;
-
-const DropdownFormField = props => (
-  <Form.Field>
-    <Dropdown selection {...props.input}
-              options={props.options}
-              value={props.input.value}
-              onChange={(param,data) => props.input.onChange(data.value)}
-              placeholder={props.label} 
-     />
-   </Form.Field>
- )

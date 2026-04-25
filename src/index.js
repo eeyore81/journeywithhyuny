@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import App from './components/app';
-import store from './store'
-import Firebase, { FirebaseContext } from './components/firebase';
+import store from './store';
+import firebase from './components/firebase';
+import { FirebaseContext } from './components/firebase/context';
 
 ReactDOM.render(
-  <Provider store={store}>
-  <FirebaseContext.Provider value={new Firebase()}>
-    <App />
-  </FirebaseContext.Provider>
-  </Provider>
-  , document.querySelector('.container'));
+  <React.StrictMode>
+    <Provider store={store}>
+      <FirebaseContext.Provider value={firebase}>
+        <App />
+      </FirebaseContext.Provider>
+    </Provider>
+  </React.StrictMode>,
+  document.querySelector('.container')
+);

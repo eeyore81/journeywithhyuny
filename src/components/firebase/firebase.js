@@ -1,5 +1,5 @@
-import app from 'firebase/app';
-import 'firebase/database';
+import { initializeApp, getApps } from 'firebase/app';
+import { getDatabase, ref, child, get, push, set, remove } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -13,11 +13,30 @@ const firebaseConfig = {
 
 class Firebase {
   constructor() {
-    const appInstance = app.apps.length ? app.app() : app.initializeApp(firebaseConfig);
-    this.db = appInstance.database();
+    if (!getApps().length) {
+      initializeApp(firebaseConfig);
+    }
+    this.db = getDatabase();
   }
-  blogs = () => this.db.ref('blog');
-  category = () => this.db.ref('category');
+
+  blogsRef = () => ref(this.db, 'blog');
+  categoryRef = () => ref(this.db, 'category');
+
+  getBlogs = async () => {
+    const snapshot = await get(this.blogsRef());
+    return snapshot.val() || {};
+  };
+
+  getCategories = async () => {
+    const snapshot = await get(this.categoryRef());
+    return snapshot.val() || [];
+  };
+
+  addBlog = (data) => push(this.blogsRef(), data);
+
+  updateBlog = (key, data) => set(child(this.blogsRef(), key), data);
+
+  removeBlog = (key) => remove(child(this.blogsRef(), key));
 }
 
 export default Firebase; 

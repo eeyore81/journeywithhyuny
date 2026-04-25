@@ -1,36 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { withFirebase } from './firebase';
-import NewDairy from './newdiary'; 
-import { Redirect } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import FirebaseContext from './firebase/context';
+import NewDiary from './newdiary';
 const _ = require('lodash');
 
-const NewDiaryContainer = (props) => {
-    const [redirect, setRedirect] = useState(0);
-    const [category, setCategory] = useState([]);
-    const updateData = props.location && props.location.update;
+const NewDiaryContainer = () => {
+  const [category, setCategory] = useState([]);
+  const firebase = useContext(FirebaseContext);
+  const history = useHistory();
+  const location = useLocation();
+  const updateData = location.state?.update;
 
-    useEffect(()=>{
-      props.firebase.category().once('value').then(snapshot=>{
-         const categoryOptions = _.map(snapshot.val() || [], (category,index) => ({
-         key: index,
-         text: category,
-         value: category
-       }))
-       setCategory(categoryOptions);
+  useEffect(() => {
+    const loadCategories = async () => {
+      const categories = await firebase.getCategories();
+      const categoryOptions = _.map(categories || [], (category, index) => ({
+        key: index,
+        text: category,
+        value: category,
+      }));
+      setCategory(categoryOptions);
+    };
+    loadCategories();
+  }, [firebase]);
+
+  const onSubmitHandler = async (values) => {
+    if (updateData != undefined) {
+      await firebase.updateBlog(updateData.key, values);
+    } else {
+      await firebase.addBlog({
+        title: values.title,
+        category: values.category,
+        comment: values.comment || '',
+        mediaLink: values.mediaLink || '',
       });
-    },[]);
-    const onSubmitHandler = (values) => {
-        if(updateData != undefined) {
-          let ref = props.firebase.blogs().child(updateData.key);
-          ref.set(values);
-        } else {
-        props.firebase.blogs().push({title: values.title, category: values.category, comment: values.comment || "", mediaLink: values.mediaLink || ""})
-        }
-        setRedirect(1);
     }
-    if(redirect === 1)
-        return (<Redirect to='/diary'/>);
-    return <NewDairy onSubmit={onSubmitHandler} categoryOptions = {category} update= {updateData}/>;
+    history.push('/diary');
+  };
+
+  return <NewDiary onSubmit={onSubmitHandler} categoryOptions={category} update={updateData} />;
 };
 
-export default withFirebase(NewDiaryContainer);
+export default NewDiaryContainer;
