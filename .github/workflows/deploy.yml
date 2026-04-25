@@ -47,7 +47,7 @@ jobs:
         with:
           personal_token: ${{ secrets.GH_PAT }}
           publish_dir: ./build
-          destination_repo: eeyore81/eeyore81.github.io
+          external_repository: eeyore81/eeyore81.github.io
           publish_branch: master
           user_name: github-actions
           user_email: github-actions@github.com
