@@ -41,8 +41,10 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
       </Typography>
       <Stack spacing={2}>
         <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        <FormControl fullWidth>
-          <InputLabel id="new-diary-category-label">Category</InputLabel>
+        <FormControl fullWidth variant="outlined">
+          <InputLabel id="new-diary-category-label" shrink>
+            Category
+          </InputLabel>
           <Select
             labelId="new-diary-category-label"
             value={selectedCategory}

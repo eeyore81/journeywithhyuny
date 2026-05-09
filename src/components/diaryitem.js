@@ -48,8 +48,10 @@ const DiaryItem = () => {
 
   return (
     <Box>
-      <FormControl fullWidth size="small" sx={{ minWidth: 260, mb: 2 }}>
-        <InputLabel id="category-select-label">Select categories</InputLabel>
+      <FormControl fullWidth size="small" variant="outlined" sx={{ minWidth: 260, mb: 2 }}>
+        <InputLabel id="category-select-label" shrink>
+          Select categories
+        </InputLabel>
         <Select
           labelId="category-select-label"
           label="Select categories"
