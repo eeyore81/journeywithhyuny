@@ -50,7 +50,10 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
             value={selectedCategory}
             label="Category"
             variant="outlined"
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setCustomCategory('');
+            }}
             displayEmpty
             renderValue={(selected) => (selected ? selected : <em>None</em>)}
           >
@@ -68,7 +71,11 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
           label="Or enter a new category"
           fullWidth
           value={customCategory}
-          onChange={(e) => setCustomCategory(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setCustomCategory(value);
+            setSelectedCategory(value);
+          }}
           helperText="If you type a category here, it will override the selected category."
         />
         <TextField
