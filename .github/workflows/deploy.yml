@@ -12,6 +12,9 @@ jobs:
     environment: github-pages
     env:
       REACT_APP_GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
+      REACT_APP_SUPABASE_URL: ${{ secrets.REACT_APP_SUPABASE_URL }}
+      REACT_APP_SUPABASE_ANON_KEY: ${{ secrets.REACT_APP_SUPABASE_ANON_KEY }}
+      REACT_APP_SUPABASE_STORAGE_BUCKET: ${{ secrets.REACT_APP_SUPABASE_STORAGE_BUCKET }}
 
     steps:
       - name: Checkout repository
