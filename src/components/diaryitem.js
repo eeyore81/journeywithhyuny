@@ -56,7 +56,6 @@ const DiaryItem = () => {
           displayEmpty
           value={categorySelected}
           onChange={handleChange}
-          renderValue={(selected) => (selected ? selected : 'All categories')}
         >
           <MenuItem value="">
             <em>All categories</em>
