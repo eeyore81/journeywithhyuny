@@ -129,8 +129,8 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
         />
         <TextField
           label="Media Link (embed URL)"
-          value={mediaLink}
-          onChange={(e) => setMediaLink(e.target.value)}
+          value={existingMediaLink}
+          onChange={(e) => setExistingMediaLink(e.target.value)}
         />
         <Box>
           <Button type="submit" variant="contained">
