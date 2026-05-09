@@ -2,7 +2,18 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FirebaseContext from './firebase/context';
-import { Button, Dropdown, Segment, Header, Container, Label } from 'semantic-ui-react';
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  Typography,
+} from '@mui/material';
 import './diaryitem.css';
 const _ = require('lodash');
 
@@ -33,38 +44,50 @@ const DiaryItem = () => {
     loadData();
   }, [dispatch, firebase]);
 
-  const handleChange = (e, { value }) => setCategorySelected(value);
+  const handleChange = (event) => setCategorySelected(event.target.value);
 
   return (
-    <div>
-      <Dropdown
-        placeholder="Select categories"
-        selection
-        options={category}
-        value={categorySelected}
-        onChange={handleChange}
-      />
+    <Box>
+      <FormControl size="small" sx={{ minWidth: 260, mb: 2 }}>
+        <InputLabel id="category-select-label">Select categories</InputLabel>
+        <Select
+          labelId="category-select-label"
+          label="Select categories"
+          displayEmpty
+          value={categorySelected}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>All categories</em>
+          </MenuItem>
+          {category.map((item) => (
+            <MenuItem key={item.key} value={item.value}>
+              {item.text}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       {article.slice(0).reverse().map((value) => {
         if (
           (searchResult == null || (value.title || '').includes(searchResult)) &&
           (!categorySelected || value.category === categorySelected)
         ) {
           return (
-            <Container key={value.key} style={{ margin: 20 }}>
-              <Segment attached="top">
-                <div className="ui grid">
-                  <div className="thirteen wide column">
-                    <Label
-                      color={value.category != undefined && value.category.includes('Hyuny') === true ? 'red' : 'blue'}
-                      content={value.category}
-                      style={{ display: 'inline' }}
-                      ribbon
+            <Paper key={value.key} elevation={1} sx={{ m: 2, overflow: 'hidden' }}>
+              <Box sx={{ borderBottom: '1px solid #e9ecef', p: 2 }}>
+                <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" gap={2}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                    <Chip
+                      color={value.category != undefined && value.category.includes('Hyuny') === true ? 'error' : 'primary'}
+                      label={value.category || 'Uncategorized'}
+                      size="small"
                     />
-                    <Header as="h3" content={value.title} style={{ display: 'inline' }} />
-                  </div>
-                  <div className="three wide column">
+                    <Typography variant="h6">{value.title}</Typography>
+                  </Box>
+                  <Stack direction="row" spacing={1}>
                     <Button
-                      size="tiny"
+                      size="small"
+                      variant="outlined"
                       onClick={() => {
                         navigate('/new', { state: { update: value } });
                       }}
@@ -72,7 +95,9 @@ const DiaryItem = () => {
                       Modify
                     </Button>
                     <Button
-                      size="tiny"
+                      size="small"
+                      color="error"
+                      variant="outlined"
                       onClick={() => {
                         firebase.removeBlog(value.key);
                         setArticle(article.filter((article) => article.key !== value.key));
@@ -80,30 +105,28 @@ const DiaryItem = () => {
                     >
                       Delete
                     </Button>
-                  </div>
-                </div>
-              </Segment>
-              <Segment attached="bottom">
-                <Container style={{ whiteSpace: 'pre-line' }}>
-                  {value.comment}
-                  {value.mediaLink && value.mediaLink.includes('embed') ? (
-                    <iframe
-                      src={value.mediaLink}
-                      allowFullScreen
-                      frameBorder="0"
-                      style={{ display: 'block', height: '80vh', width: '65vw' }}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </Container>
-              </Segment>
-            </Container>
+                  </Stack>
+                </Stack>
+              </Box>
+              <Box sx={{ p: 2, whiteSpace: 'pre-line' }}>
+                {value.comment}
+                {value.mediaLink && value.mediaLink.includes('embed') ? (
+                  <iframe
+                    src={value.mediaLink}
+                    allowFullScreen
+                    frameBorder="0"
+                    style={{ display: 'block', height: '80vh', width: '65vw' }}
+                  />
+                ) : (
+                  ''
+                )}
+              </Box>
+            </Paper>
           );
         }
         return null;
       })}
-    </div>
+    </Box>
   );
 };
 
