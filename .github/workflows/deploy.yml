@@ -1,0 +1,62 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy build to eeyore81.github.io
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          set -e
+          REMOTE="https://x-access-token:${GH_PAT}@github.com/eeyore81/eeyore81.github.io.git"
+          rm -rf deploy-repo
+          git clone --depth 1 "$REMOTE" deploy-repo || true
+
+          if [ -d deploy-repo/.git ]; then
+            pushd deploy-repo
+            BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo master)
+            popd
+          else
+            mkdir -p deploy-repo
+            pushd deploy-repo
+            git init
+            git remote add origin "$REMOTE"
+            BRANCH=master
+            popd
+          fi
+
+          rm -rf deploy-repo/*
+          cp -R build/* deploy-repo/
+
+          pushd deploy-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add --all
+          if git diff --cached --quiet; then
+            echo "No changes to deploy"
+          else
+            git commit -m "Deploy from journeywithhyuny"
+          fi
+          git push origin "HEAD:$BRANCH" --force
