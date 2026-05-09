@@ -9,8 +9,9 @@ export default class GasFirebase {
   async request(action, payload = {}) {
     const response = await fetch(this.endpoint, {
       method: 'POST',
+      mode: 'cors',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain;charset=UTF-8',
       },
       body: JSON.stringify({ action, payload }),
     });

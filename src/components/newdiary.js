@@ -13,14 +13,16 @@ import {
 
 const NewDiary = ({ onSubmit, categoryOptions, update }) => {
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [customCategory, setCustomCategory] = useState('');
   const [comment, setComment] = useState('');
   const [mediaLink, setMediaLink] = useState('');
 
   useEffect(() => {
     if (update) {
       setTitle(update.title || '');
-      setCategory(update.category || '');
+      setSelectedCategory(update.category || '');
+      setCustomCategory('');
       setComment(update.comment || '');
       setMediaLink(update.mediaLink || '');
     }
@@ -28,6 +30,7 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const category = customCategory.trim() || selectedCategory;
     onSubmit({ title, category, comment, mediaLink });
   };
 
@@ -38,14 +41,19 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
       </Typography>
       <Stack spacing={2}>
         <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        <FormControl>
+        <FormControl fullWidth>
           <InputLabel id="new-diary-category-label">Category</InputLabel>
           <Select
             labelId="new-diary-category-label"
-            value={category}
+            value={selectedCategory}
             label="Category"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            displayEmpty
+            renderValue={(selected) => (selected ? selected : 'Choose a category')}
           >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
             {categoryOptions.map((item) => (
               <MenuItem key={item.key} value={item.value}>
                 {item.text}
@@ -53,6 +61,13 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
             ))}
           </Select>
         </FormControl>
+        <TextField
+          label="Or enter a new category"
+          fullWidth
+          value={customCategory}
+          onChange={(e) => setCustomCategory(e.target.value)}
+          helperText="If you type a category here, it will override the selected category."
+        />
         <TextField
           label="Comment"
           multiline

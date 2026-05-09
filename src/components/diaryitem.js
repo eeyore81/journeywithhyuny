@@ -48,7 +48,7 @@ const DiaryItem = () => {
 
   return (
     <Box>
-      <FormControl size="small" sx={{ minWidth: 260, mb: 2 }}>
+      <FormControl fullWidth size="small" sx={{ minWidth: 260, mb: 2 }}>
         <InputLabel id="category-select-label">Select categories</InputLabel>
         <Select
           labelId="category-select-label"
@@ -56,6 +56,7 @@ const DiaryItem = () => {
           displayEmpty
           value={categorySelected}
           onChange={handleChange}
+          renderValue={(selected) => (selected ? selected : 'All categories')}
         >
           <MenuItem value="">
             <em>All categories</em>
