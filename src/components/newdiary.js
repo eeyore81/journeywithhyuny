@@ -47,8 +47,10 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
             labelId="new-diary-category-label"
             value={selectedCategory}
             label="Category"
+            variant="outlined"
             onChange={(e) => setSelectedCategory(e.target.value)}
             displayEmpty
+            renderValue={(selected) => (selected ? selected : <em>None</em>)}
           >
             <MenuItem value="">
               <em>None</em>

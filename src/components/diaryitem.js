@@ -53,9 +53,11 @@ const DiaryItem = () => {
         <Select
           labelId="category-select-label"
           label="Select categories"
+          variant="outlined"
           displayEmpty
           value={categorySelected}
           onChange={handleChange}
+          renderValue={(selected) => (selected ? selected : <em>All categories</em>)}
         >
           <MenuItem value="">
             <em>All categories</em>
