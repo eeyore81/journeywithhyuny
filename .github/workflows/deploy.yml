@@ -9,6 +9,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_USE_GAS: ${{ secrets.REACT_APP_USE_GAS }}
+      REACT_APP_GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
 
     steps:
       - name: Checkout repository
