@@ -26,23 +26,37 @@ const DiaryItem = () => {
   const firebase = useContext(FirebaseContext);
   const navigate = useNavigate();
 
+  const getCategoryOptionsFromArticles = (articles) => {
+    const categories = _.uniq(
+      articles
+        .map((item) => item.category)
+        .filter((category) => typeof category === 'string' && category.trim().length > 0)
+    );
+    return categories.map((category, index) => ({
+      key: index,
+      text: category,
+      value: category,
+    }));
+  };
+
   useEffect(() => {
     const loadData = async () => {
       const blogsData = await firebase.getBlogs();
       const articles = Object.keys(blogsData).map((key) => ({ ...blogsData[key], key }));
       setArticle(articles);
       dispatch({ type: 'ARTICLES_SET', articles });
-
-      const categories = await firebase.getCategories();
-      const categoryOptions = _.map(categories || [], (category, index) => ({
-        key: index,
-        text: category,
-        value: category,
-      }));
-      setCategory(categoryOptions);
+      setCategory(getCategoryOptionsFromArticles(articles));
     };
     loadData();
   }, [dispatch, firebase]);
+
+  useEffect(() => {
+    const nextCategoryOptions = getCategoryOptionsFromArticles(article);
+    setCategory(nextCategoryOptions);
+    if (categorySelected && !nextCategoryOptions.some((item) => item.value === categorySelected)) {
+      setCategorySelected('');
+    }
+  }, [article, categorySelected]);
 
   const handleChange = (event) => setCategorySelected(event.target.value);
 

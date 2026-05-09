@@ -20,16 +20,10 @@ class Firebase {
   }
 
   blogsRef = () => ref(this.db, 'blog');
-  categoryRef = () => ref(this.db, 'category');
 
   getBlogs = async () => {
     const snapshot = await get(this.blogsRef());
     return snapshot.val() || {};
-  };
-
-  getCategories = async () => {
-    const snapshot = await get(this.categoryRef());
-    return snapshot.val() || [];
   };
 
   addBlog = (data) => push(this.blogsRef(), data);

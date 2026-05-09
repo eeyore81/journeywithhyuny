@@ -11,18 +11,35 @@ const NewDiaryContainer = () => {
   const location = useLocation();
   const updateData = location.state?.update;
 
+  const getCategoryOptionsFromArticles = (articles) => {
+    const categories = _.uniq(
+      articles
+        .map((item) => item.category)
+        .filter((category) => typeof category === 'string' && category.trim().length > 0)
+    );
+
+    if (updateData?.category) {
+      const currentCategory = updateData.category.trim();
+      if (currentCategory && !categories.includes(currentCategory)) {
+        categories.unshift(currentCategory);
+      }
+    }
+
+    return categories.map((category, index) => ({
+      key: index,
+      text: category,
+      value: category,
+    }));
+  };
+
   useEffect(() => {
     const loadCategories = async () => {
-      const categories = await firebase.getCategories();
-      const categoryOptions = _.map(categories || [], (category, index) => ({
-        key: index,
-        text: category,
-        value: category,
-      }));
-      setCategory(categoryOptions);
+      const blogsData = await firebase.getBlogs();
+      const articles = Object.keys(blogsData).map((key) => ({ ...blogsData[key], key }));
+      setCategory(getCategoryOptionsFromArticles(articles));
     };
     loadCategories();
-  }, [firebase]);
+  }, [firebase, updateData]);
 
   const onSubmitHandler = async (values) => {
     if (updateData != undefined) {
