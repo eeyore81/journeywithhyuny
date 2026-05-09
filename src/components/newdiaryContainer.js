@@ -46,7 +46,7 @@ const NewDiaryContainer = () => {
 
     if (values.mediaFile) {
       const fileName = `${Date.now()}-${values.mediaFile.name}`;
-      const path = `blog-images/${fileName}`;
+      const path = fileName;
       mediaLink = await firebase.uploadImage(values.mediaFile, path);
     }
 
