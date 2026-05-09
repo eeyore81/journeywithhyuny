@@ -42,15 +42,25 @@ const NewDiaryContainer = () => {
   }, [firebase, updateData]);
 
   const onSubmitHandler = async (values) => {
+    let mediaLink = values.mediaLink || '';
+
+    if (values.mediaFile) {
+      const fileName = `${Date.now()}-${values.mediaFile.name}`;
+      const path = `blog-images/${fileName}`;
+      mediaLink = await firebase.uploadImage(values.mediaFile, path);
+    }
+
+    const payload = {
+      title: values.title,
+      category: values.category,
+      comment: values.comment || '',
+      mediaLink,
+    };
+
     if (updateData != undefined) {
-      await firebase.updateBlog(updateData.key, values);
+      await firebase.updateBlog(updateData.key, payload);
     } else {
-      await firebase.addBlog({
-        title: values.title,
-        category: values.category,
-        comment: values.comment || '',
-        mediaLink: values.mediaLink || '',
-      });
+      await firebase.addBlog(payload);
     }
     navigate('/diary');
   };

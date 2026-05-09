@@ -16,7 +16,9 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [customCategory, setCustomCategory] = useState('');
   const [comment, setComment] = useState('');
-  const [mediaLink, setMediaLink] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
+  const [existingMediaLink, setExistingMediaLink] = useState('');
 
   useEffect(() => {
     if (update) {
@@ -24,14 +26,32 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
       setSelectedCategory(update.category || '');
       setCustomCategory('');
       setComment(update.comment || '');
-      setMediaLink(update.mediaLink || '');
+      setExistingMediaLink(update.mediaLink || '');
+      setImagePreviewUrl(update.mediaLink || '');
     }
   }, [update]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0] || null;
+    setImageFile(file);
+
+    if (file) {
+      setImagePreviewUrl(URL.createObjectURL(file));
+    } else {
+      setImagePreviewUrl(existingMediaLink);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const category = customCategory.trim() || selectedCategory;
-    onSubmit({ title, category, comment, mediaLink });
+    onSubmit({
+      title,
+      category,
+      comment,
+      mediaLink: existingMediaLink,
+      mediaFile: imageFile,
+    });
   };
 
   return (
@@ -78,6 +98,28 @@ const NewDiary = ({ onSubmit, categoryOptions, update }) => {
           }}
           helperText="If you type a category here, it will override the selected category."
         />
+        <Box>
+          <Button variant="outlined" component="label">
+            Upload image
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={handleFileChange}
+            />
+          </Button>
+          {imagePreviewUrl && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2">Image preview</Typography>
+              <Box
+                component="img"
+                src={imagePreviewUrl}
+                alt="Selected"
+                sx={{ width: '100%', maxHeight: 360, objectFit: 'contain', mt: 1 }}
+              />
+            </Box>
+          )}
+        </Box>
         <TextField
           label="Comment"
           multiline

@@ -128,16 +128,18 @@ const DiaryItem = () => {
               </Box>
               <Box sx={{ p: 2, whiteSpace: 'pre-line' }}>
                 {value.comment}
-                {value.mediaLink && value.mediaLink.includes('embed') ? (
-                  <iframe
-                    src={value.mediaLink}
-                    allowFullScreen
-                    frameBorder="0"
-                    style={{ display: 'block', height: '80vh', width: '65vw' }}
-                  />
-                ) : (
-                  ''
-                )}
+                {value.mediaLink ? (
+                  value.mediaLink.includes('embed') ? (
+                    <iframe
+                      src={value.mediaLink}
+                      allowFullScreen
+                      frameBorder="0"
+                      style={{ display: 'block', height: '80vh', width: '65vw', marginTop: 16 }}
+                    />
+                  ) : (
+                    <Box component="img" src={value.mediaLink} alt={value.title} sx={{ display: 'block', maxWidth: '100%', maxHeight: 500, mt: 2 }} />
+                  )
+                ) : null}
               </Box>
             </Paper>
           );

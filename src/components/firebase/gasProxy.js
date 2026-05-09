@@ -11,7 +11,7 @@ export default class GasFirebase {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Content-Type': 'text/plain;charset=UTF-8',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ action, payload }),
     });
@@ -27,6 +27,21 @@ export default class GasFirebase {
     }
     return result.data;
   }
+
+  fileToDataUrl = async (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+  uploadImage = async (file) => {
+    if (!file) {
+      return '';
+    }
+    return this.fileToDataUrl(file);
+  };
 
   getBlogs = () => this.request('getBlogs');
   getCategories = () => this.request('getCategories');
